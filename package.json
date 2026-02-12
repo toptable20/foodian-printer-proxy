@@ -1,8 +1,8 @@
 {
-	"name": "goyoo-printer-proxy",
-	"version": "1.1.0",
-	"description": "Goyoo 3D Printer Local Proxy (Electron + HTTPS)",
-	"main": "main.js",
+	"name": "foodian-printer-proxy",
+	"version": "2.0.0",
+	"description": "Foodian 3D Printer Local Proxy (Electron + HTTPS)",
+	"main": "js/main.js",
 	"type": "module",
 	"scripts": {
 		"start": "electron .",
@@ -14,24 +14,23 @@
 		"node-fetch": "^3.3.2"
 	},
 	"devDependencies": {
-		"electron": "^31.0.0",
+		"electron": "^31.7.7",
 		"electron-builder": "^24.13.3"
 	},
 	"build": {
-		"appId": "com.goyoo.printerproxy",
-		"productName": "Goyoo Printer Proxy",
+		"appId": "com.foodian.printerproxy",
+		"productName": "Foodian Printer Proxy",
 		"asar": true,
 		"asarUnpack": [
-			"cert.pem",
-			"key.pem",
-			"proxy.js"
+			"cert/cert.pem",
+			"cert/key.pem",
+			"js/proxy.js"
 		],
 		"files": [
 			"dist/**/*",
-			"main.js",
-			"proxy.js",
-			"cert.pem",
-			"key.pem",
+			"js/**/*",
+			"cert/**/*",
+			"html/**/*",
 			"src/**/*",
 			"node_modules/**/*",
 			"package.json",
@@ -43,7 +42,7 @@
 		],
 		"win": {
 			"target": "nsis",
-			"icon": "icon.png",
+			"icon": "css/image/icon.png",
 			"requestedExecutionLevel": "requireAdministrator"
 		},
 		"directories": {

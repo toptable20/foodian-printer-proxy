@@ -1,7 +1,7 @@
 @echo off
-title Goyoo Local Certificate Installer
+title Foodian Local Certificate Installer
 echo =====================================================
-echo   Goyoo Printer Proxy HTTPS Certificate Installer
+echo   Foodian Printer Proxy HTTPS Certificate Installer
 echo =====================================================
 echo.
 

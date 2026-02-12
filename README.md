@@ -1,6 +1,6 @@
-# Goyoo Printer Proxy
+# Foodian Printer Proxy
 
-로컬 네트워크 3D 프린터를 HTTPS 웹앱(goyoo.co.kr)에서 안전하게 제어할 수 있는 로컬 프록시입니다.
+로컬 네트워크 3D 프린터를 HTTPS 웹앱(goyoo.co.kr, foodian.co.kr)에서 안전하게 제어할 수 있는 로컬 프록시입니다.
 
 ---
 

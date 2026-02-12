@@ -36,8 +36,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ✅ key, cert 절대경로 지정 (빌드 후에도 정상 인식)
-const keyPath = path.join(__dirname, 'key.pem');
-const certPath = path.join(__dirname, 'cert.pem');
+const keyPath = path.join(__dirname, '../cert/key.pem');
+const certPath = path.join(__dirname, '../cert/cert.pem');
 
 // 🔐 HTTPS 인증서 로드
 const options = {
@@ -62,21 +62,34 @@ app.get('/status', async (req, res) => {
 				.status(400)
 				.json({ error: 'printerUrl 쿼리 파라미터가 필요합니다.' });
 		}
-		const response = await fetch(`${PRINTER_URL}/server/info`, {
-			timeout: 2000,
-		});
-		const statusText = await response.text();
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+		let statusText;
+		try {
+			const response = await fetch(`${PRINTER_URL}/server/info`, { signal: controller.signal });
+			statusText = await response.text();
+		} catch (err) {
+			if (err.name === 'AbortError') {
+				throw new Error('Time OUT!!!');
+			} else {
+				throw err;
+			}
+		} finally {
+			clearTimeout(timeoutId);
+		}
 		res.status(200).json({
 			proxy: 'ok',
 			printer: 'ok',
 			message: statusText,
 		});
 	} catch (e) {
-		console.error('❌ /status - 프린터 연결 실패:', e);
+		console.error('status - printer connect fail:', e.message);
 		res.status(500).json({
 			proxy: 'ok',
 			printer: 'unreachable',
-			message: '프린터 연결 실패',
+			message: 'printer connect fail',
+			error: e.message
 		});
 	}
 });
@@ -99,8 +112,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 			console.error('❌ /upload - file 데이터 누락');
 			return res.status(400).json({ error: 'file이 필요합니다.' });
 		}
-
-		console.log('✅ 받은 파일:', file.originalname, '크기:', file.size);
 
 		const formData = new FormData();
 		// multer로 받은 파일을 Blob으로 변환하여 전송
@@ -147,7 +158,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
 // 서버 시작 함수 export
 export function startProxyServer() {
-	https.createServer(options, app).listen(9443, () => {
-		console.log('✅ Local HTTPS proxy running at https://localhost:9443');
+	let port = 9443;
+	https.createServer(options, app).listen(port, () => {
+		console.log('Local HTTPS proxy running at https://localhost:'+port);
 	});
 }

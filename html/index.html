@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Foodian Printer Proxy</h1>
+    <p>3D 프린터로 gcode를 전달하는 프록시 앱입니다.</p>
+    <p>프록시 연결이 되지 않는 경우,</p>
+    <a href="#" id="health-link">https://localhost:9443/health</a>
+    <p>위 링크에 접속하여 '고급' - 'localhost(안전하지 않음)(으)로 이동' 을 클릭해주세요</p>
+</body>
+
+
+<script>
+  // FoodianPrinterProxy://open
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const link = document.getElementById('health-link');
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      try {
+        window.electronAPI.openExternal('https://localhost:9443/health');
+      } catch(err) {
+        console.error('openExternal 호출 실패:', err);
+      }
+    });
+  });
+</script>
