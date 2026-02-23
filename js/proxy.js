@@ -116,7 +116,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 		const formData = new FormData();
 		// multer로 받은 파일을 Blob으로 변환하여 전송
 		const blob = new Blob([file.buffer], { type: 'application/octet-stream' });
-		formData.append('file', blob, file.originalname);
+		const decodeFileName = decodeURIComponent(file.originalname);
+		formData.append('file', blob, decodeFileName);
 
 		const result = await fetch(`${PRINTER_URL}/server/files/upload`, {
 			method: 'POST',
